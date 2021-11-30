@@ -27,21 +27,21 @@ def getInput(path):
                 origins.append(pos)
 
             if c != '#':
-                graph.addNode(pos, c)
+                graph.add_node(pos, c)
             pos = pos.right()
         pos = pos.down()
         pos.x = 0
 
-    graph.autoLinkManhattan()
+    graph.auto_link_manhattan()
 
     return graph, doors, keys, origins
 
 
 def getDag(graph, doors, keys, origin):
     combined = list(keys.values()) + list(doors.values()) + [origin]
-    graph.reduceMap(combined)
+    graph.reduce_map(combined)
 
-    graph.calcDistances(origin)
+    graph.calc_distances(origin)
 
     dag = {}
     for keyPos in keys.values():
@@ -134,8 +134,8 @@ def day18a():
         print("{} : {}".format(k, dag[k]))
     print()
 
-    graph.reduceMap(list(keys.values()) + [origin])
-    distancePairs = graph.calcDistancePairs(list(keys.values()) + [origin])
+    graph.reduce_map(list(keys.values()) + [origin])
+    distancePairs = graph.calc_distance_pairs(list(keys.values()) + [origin])
 
     cost, sequence = GetCost([origin], [], dag, keys, distancePairs, {})
     print('Part 1 shortest path:')
@@ -151,8 +151,8 @@ def day18b():
 
     graph, doors, keys, origins = getInput('day18b.txt')
 
-    graph.reduceMap(list(keys.values()) + origins)
-    distancePairs = graph.calcDistancePairs(list(keys.values()) + origins)
+    graph.reduce_map(list(keys.values()) + origins)
+    distancePairs = graph.calc_distance_pairs(list(keys.values()) + origins)
 
     cost, sequence = GetCost(origins, [], dag, keys, distancePairs, {})
     print('Part 2 shortest path:')

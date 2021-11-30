@@ -14,7 +14,7 @@ def getInput():
     for line in lines:
         for c in line:
             if c == '.':
-                graph.addNode(pos)
+                graph.add_node(pos)
             elif c in uppercase:
                 letters[pos] = c
 
@@ -23,7 +23,7 @@ def getInput():
         pos = pos.down()
         pos.x = 0
 
-    graph.autoLinkManhattan()
+    graph.auto_link_manhattan()
 
     portals = {}
     for pos in letters:
@@ -55,7 +55,7 @@ def getInput():
     for port in portals:
         if port == 'AA' or port == 'ZZ':
             continue
-        graph.addEdge(portals[port][0], portals[port][1], directed=False)
+        graph.add_edge(portals[port][0], portals[port][1], directed=False)
 
     return graph, portals
 
@@ -64,7 +64,7 @@ def day20a():
     graph, portals = getInput()
     origin = portals['AA']
     goal = portals['ZZ']
-    graph.calcDistances(origin, goal)
+    graph.calc_distances(origin, goal)
     print(graph.nodes[goal].distance)
 
 
@@ -91,7 +91,7 @@ def getInput2():
                 dpos = pos.clone()
                 for i in range(depth):
                     dpos.z = i
-                    graph.addNode(dpos.clone())
+                    graph.add_node(dpos.clone())
 
             elif c in uppercase:
                 letters[pos] = c
@@ -102,7 +102,7 @@ def getInput2():
         pos.x = 0
 
     print("linking nodes...")
-    graph.autoLinkManhattan()
+    graph.auto_link_manhattan()
 
     portals = {}
     for pos in letters:
@@ -152,7 +152,7 @@ def getInput2():
             inner.z = i
             outer = portals[port][0].clone()  # outer, this level
             outer.z = i + 1
-            graph.addEdge(inner, outer, directed=False)
+            graph.add_edge(inner, outer, directed=False)
 
     return graph, portals
 
@@ -163,7 +163,7 @@ def day20b():
     origin = portals['AA']
     goal = portals['ZZ']
     print("pathfinding...")
-    graph.calcDistances(origin, goal)
+    graph.calc_distances(origin, goal)
     print(graph.nodes[goal].distance)
 
 

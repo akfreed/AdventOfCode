@@ -50,12 +50,12 @@ class Graph:
         self.nodes = {}
         self.nodeOrder = []
 
-    def addNode(self, identifier, data=None):
+    def add_node(self, identifier, data=None):
         node = Vertex(identifier, data)
         self.nodes[node.identifier] = node
         self.nodeOrder.append(node)
 
-    def addEdge(self, id1, id2, directed=True, cost=1, direction=None):
+    def add_edge(self, id1, id2, directed=True, cost=1, direction=None):
         """Add an edge from the first to the second node.
         :param id1: The identifier for the first node. Can also be the node itself (instead of the identifier)
         :param id2: The identifier for the second node. Can also be the node itself (instead of the identifier)
@@ -75,7 +75,7 @@ class Graph:
         if not directed:
             node2.edges.append(Edge(node1, cost, direction))
 
-    def removeEdge(self, id1, id2, directed=True):
+    def remove_edge(self, id1, id2, directed=True):
         """Remove the edge from the first to the second node.
         Only removes 1 edge (if there are redundant edges)
         :param id1: The identifier for the first node. Can also be the node itself (instead of the identifier)
@@ -95,34 +95,34 @@ class Graph:
             node2 = self.nodes[id2]
 
         # search for the edge to remove in the node's edge list
-        toRemove = None
+        to_remove = None
         for edge in node1.edges:
             if edge.to.identifier == node2.identifier:
-                toRemove = edge
+                to_remove = edge
                 break
         # if no edge found, fail
-        if toRemove is None:
+        if to_remove is None:
             return False
 
         # remove the edge
-        node1.edges.remove(toRemove)
+        node1.edges.remove(to_remove)
 
         if directed is False:
-            toRemove = None
+            to_remove = None
             for edge in node2.edges:
                 if edge.to.identifier == node1.identifier:
-                    toRemove = edge
+                    to_remove = edge
                     break
             # if no edge found, fail
-            if toRemove is None:
+            if to_remove is None:
                 return False
 
             # remove the edge
-            node2.edges.remove(toRemove)
+            node2.edges.remove(to_remove)
 
         return True
 
-    def autoLinkManhattan(self):
+    def auto_link_manhattan(self):
         """Automatically add edges to each node to the
         north, west, south, and east nodes, (if they exist) in that order.
 
@@ -130,15 +130,15 @@ class Graph:
         """
         for position in self.nodes:
             if position.up() in self.nodes:
-                self.addEdge(position, position.up(), directed=True, cost=1, direction=Direction.UP)
+                self.add_edge(position, position.up(), directed=True, cost=1, direction=Direction.UP)
             if position.left() in self.nodes:
-                self.addEdge(position, position.left(), directed=True, cost=1, direction=Direction.LEFT)
+                self.add_edge(position, position.left(), directed=True, cost=1, direction=Direction.LEFT)
             if position.down() in self.nodes:
-                self.addEdge(position, position.down(), directed=True, cost=1, direction=Direction.DOWN)
+                self.add_edge(position, position.down(), directed=True, cost=1, direction=Direction.DOWN)
             if position.right() in self.nodes:
-                self.addEdge(position, position.right(), directed=True, cost=1, direction=Direction.RIGHT)
+                self.add_edge(position, position.right(), directed=True, cost=1, direction=Direction.RIGHT)
 
-    def autoLinkDiagonal(self):
+    def auto_link_diagonal(self):
         """Automatically add edges to each node to the
         north, northwest, west, southwest, south, southeast, east, and northeast nodes, (if they exist) in that order.
 
@@ -146,48 +146,48 @@ class Graph:
         """
         for position in self.nodes:
             if position.up() in self.nodes:
-                self.addEdge(position, position.up(), directed=True, cost=1, direction=Direction.UP)
+                self.add_edge(position, position.up(), directed=True, cost=1, direction=Direction.UP)
             if position.up().left() in self.nodes:
-                self.addEdge(position, position.up().left(), directed=True, cost=1, direction=Direction.UP_LEFT)
+                self.add_edge(position, position.up().left(), directed=True, cost=1, direction=Direction.UP_LEFT)
             if position.left() in self.nodes:
-                self.addEdge(position, position.left(), directed=True, cost=1, direction=Direction.LEFT)
+                self.add_edge(position, position.left(), directed=True, cost=1, direction=Direction.LEFT)
             if position.down().left() in self.nodes:
-                self.addEdge(position, position.down().left(), directed=True, cost=1, direction=Direction.DOWN_LEFT)
+                self.add_edge(position, position.down().left(), directed=True, cost=1, direction=Direction.DOWN_LEFT)
             if position.down() in self.nodes:
-                self.addEdge(position, position.down(), directed=True, cost=1, direction=Direction.DOWN)
+                self.add_edge(position, position.down(), directed=True, cost=1, direction=Direction.DOWN)
             if position.down().right() in self.nodes:
-                self.addEdge(position, position.down().right(), directed=True, cost=1, direction=Direction.DOWN_RIGHT)
+                self.add_edge(position, position.down().right(), directed=True, cost=1, direction=Direction.DOWN_RIGHT)
             if position.right() in self.nodes:
-                self.addEdge(position, position.right(), directed=True, cost=1, direction=Direction.RIGHT)
+                self.add_edge(position, position.right(), directed=True, cost=1, direction=Direction.RIGHT)
             if position.up().right() in self.nodes:
-                self.addEdge(position, position.up().right(), directed=True, cost=1, direction=Direction.UP_RIGHT)
+                self.add_edge(position, position.up().right(), directed=True, cost=1, direction=Direction.UP_RIGHT)
 
-    def resetDistances(self):
+    def reset_distances(self):
         for node in self.nodes.values():
             node.visited = False
             node.distance = inf
             node.parent = None
 
-    def calcDistances(self, startNodeId, toFindId=None):
-        self.resetDistances()
+    def calc_distances(self, startNodeId, to_find_id=None):
+        self.reset_distances()
 
         if isinstance(startNodeId, Vertex):
-            startNode = startNodeId
+            start_node = startNodeId
         else:
-            startNode = self.nodes[startNodeId]
+            start_node = self.nodes[startNodeId]
 
-        startNode.visited = False
-        startNode.distance = 0
+        start_node.visited = False
+        start_node.distance = 0
 
-        toVisit = PriorityQueue(0)
-        toVisit.put(startNode)
+        to_visit = PriorityQueue(0)
+        to_visit.put(start_node)
 
-        while toVisit.empty() is False:
-            node = toVisit.get()
+        while to_visit.empty() is False:
+            node = to_visit.get()
             if node.visited:
                 continue
             node.visited = True
-            if toFindId is not None and node.identifier == toFindId:
+            if to_find_id is not None and node.identifier == to_find_id:
                 return
 
             for edge in node.edges:
@@ -198,67 +198,67 @@ class Graph:
                     if cost < neighbor.distance:
                         neighbor.distance = cost
                         neighbor.parent = node
-                    toVisit.put(neighbor)
+                    to_visit.put(neighbor)
 
-    def findPath(self, startId, endId, recalcDistance=True):
-        if recalcDistance:
-            self.calcDistances(startId, toFindId=endId)
+    def find_path(self, startId, end_id, recalc_distance=True):
+        if recalc_distance:
+            self.calc_distances(startId, to_find_id=end_id)
 
-        if isinstance(endId, Vertex):
-            endNode = endId
+        if isinstance(end_id, Vertex):
+            end_node = end_id
         else:
-            endNode = self.nodes[endId]
+            end_node = self.nodes[end_id]
 
-        if endNode.distance == inf:
+        if end_node.distance == inf:
             return []
 
         path = []
-        trace = endNode
+        trace = end_node
         while trace is not None:
             path.append(trace)
             trace = trace.parent
         path.reverse()
         return path
 
-    def calcDistancePairs(self, nodeIds):
+    def calc_distance_pairs(self, node_ids):
         distances = {}
-        for fromId in nodeIds:
-            self.calcDistances(fromId)
-            myDistances = {}
-            for toId in nodeIds:
+        for fromId in node_ids:
+            self.calc_distances(fromId)
+            my_distances = {}
+            for toId in node_ids:
                 if fromId == toId:
                     continue
                 dist = self.nodes[toId].distance
                 if dist != inf:
-                    myDistances[toId] = dist
-            distances[fromId] = myDistances
+                    my_distances[toId] = dist
+            distances[fromId] = my_distances
         return distances
 
-    def reduceMap(self, nodeIds):
-        distances = self.calcDistancePairs(nodeIds)
+    def reduce_map(self, node_ids):
+        distances = self.calc_distance_pairs(node_ids)
         # if shortest_dist(a->b) + shortest_dist(b->c) == shortest_dist(a->c) then b is between a and c
-        toRemove = set()
-        for a in nodeIds:
-            for b in nodeIds:
+        to_remove = set()
+        for a in node_ids:
+            for b in node_ids:
                 if a == b or b not in distances[a]:
                     continue
-                for c in nodeIds:
+                for c in node_ids:
                     if a == c or b == c or c not in distances[b] or c not in distances[a]:
                         continue
                     if distances[a][b] + distances[b][c] == distances[a][c]:
-                        toRemove.add((a, c))
+                        to_remove.add((a, c))
 
-        for fromId, toId in toRemove:
-            del distances[fromId][toId]
+        for from_id, to_id in to_remove:
+            del distances[from_id][to_id]
 
         # keep only the given nodes
-        self.nodes = {identifier: self.nodes[identifier] for identifier in nodeIds}
+        self.nodes = {identifier: self.nodes[identifier] for identifier in node_ids}
 
         # clear edges
         for node in self.nodes.values():
             node.edges = []
 
         # reattach edges
-        for fromId in distances:
-            for toId in distances[fromId]:
-                self.addEdge(fromId, toId, directed=True, cost=distances[fromId][toId])
+        for from_id in distances:
+            for to_id in distances[from_id]:
+                self.add_edge(from_id, to_id, directed=True, cost=distances[from_id][to_id])

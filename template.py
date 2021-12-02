@@ -1,16 +1,22 @@
 
-def getInput():
+def getInputA():
     with open('day01.txt', 'r') as file:
         pass
 
 
+def getInputB():
+    return getInputA()
+
+
 def day1a():
     print("Part A")
-    getInput()
+    data = getInputA()
+    pass
 
 
 def day1b():
     print("Part B")
+    data = getInputB()
     pass
 
 

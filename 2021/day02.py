@@ -1,52 +1,54 @@
 def getInputA():
     with open('day02.txt', 'r') as file:
-        return [line.strip().split(' ') for line in file.readlines()]
-
-
-def getInputB():
-    return getInputA()
+        commands = [line.strip().split(' ', 1) for line in file.readlines()]
+        return [(operation, int(amount)) for operation, amount in commands]
 
 
 def day2a():
-    print("Part A")
-    dir = getInputA()
-    x = 0
+    print("    Part A")
+    commands = getInputA()
+    horizontal = 0
     depth = 0
-    for d in dir:
-        if d[0] == "forward":
-            x += int(d[1])
-        elif d[0] == "up":
-            depth -= int(d[1])
+    for operation, amount in commands:
+        if operation == "forward":
+            horizontal += amount
+        elif operation == "up":
+            depth -= amount
             assert depth >= 0
-        elif d[0] == "down":
-            depth += int(d[1])
+        elif operation == "down":
+            depth += amount
         else:
             assert False
-    print(depth)
-    print(x)
-    print(x * depth)
+
+    print(f"Final Depth: {depth}")
+    print(f"Final Horizontal: {horizontal}")
+    print(f"Horizontal * Depth: {depth * horizontal}")
+    return depth * horizontal
 
 
 def day2b():
-    print("Part B")
-    dir = getInputA()
-    x = 0
+    print("\n    Part B")
+    commands = getInputA()
+    horizontal = 0
     depth = 0
     aim = 0
-    for d in dir:
-        if d[0] == "forward":
-            x += int(d[1])
-            depth += aim * int(d[1])
+    for operation, amount in commands:
+        if operation == "forward":
+            horizontal += amount
+            depth += aim * amount
             assert depth >= 0
-        elif d[0] == "up":
-            aim -= int(d[1])
-        elif d[0] == "down":
-            aim += int(d[1])
+        elif operation == "up":
+            aim -= amount
+            assert depth >= 0
+        elif operation == "down":
+            aim += amount
         else:
             assert False
-    print(depth)
-    print(x)
-    print(x * depth)
+
+    print(f"Final Depth: {depth}")
+    print(f"Final Horizontal: {horizontal}")
+    print(f"Horizontal * Depth: {depth * horizontal}")
+    return depth * horizontal
 
 
 if __name__ == '__main__':

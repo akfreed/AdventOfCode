@@ -9,13 +9,13 @@ def getInputB():
 
 
 def day1a():
-    print("Part A")
+    print("    Part A")
     data = getInputA()
     pass
 
 
 def day1b():
-    print("Part B")
+    print("\n    Part B")
     data = getInputB()
     pass
 

@@ -309,6 +309,12 @@ class Vector:
 
 
 def render_map(tileMap, valueToStrMapping, defaultTile=None, originMark=None):
+    """
+    :tileMape: A dictionary. Key is of type Vector. Value can be anything (typically a character).
+    :valueToStrMapping: If the value type of tileMap is a character, this can be None. Otherwise it is a dictionary where passing in the value type will yield a character to be printed.
+    :defaultTile: A character. If provided, this will be printed if a coordinate does not appear in the tileMap (key set).
+    :originMark: A character. If given, this character is printed at coordinate (0, 0).
+    """
     # find bounds
     xmin = min([vector.x for vector in tileMap.keys()])
     xmax = max([vector.x for vector in tileMap.keys()])

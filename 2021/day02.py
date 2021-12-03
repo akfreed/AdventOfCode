@@ -1,4 +1,4 @@
-def getInputA():
+def get_input():
     with open('day02.txt', 'r') as file:
         commands = [line.strip().split(' ', 1) for line in file.readlines()]
         return [(operation, int(amount)) for operation, amount in commands]
@@ -6,7 +6,7 @@ def getInputA():
 
 def day2a():
     print("    Part A")
-    commands = getInputA()
+    commands = get_input()
     horizontal = 0
     depth = 0
     for operation, amount in commands:
@@ -28,7 +28,7 @@ def day2a():
 
 def day2b():
     print("\n    Part B")
-    commands = getInputA()
+    commands = get_input()
     horizontal = 0
     depth = 0
     aim = 0

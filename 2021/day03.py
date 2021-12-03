@@ -1,14 +1,10 @@
 
-def getInputA():
+def get_input():
     with open('day03.txt', 'r') as file:
         return [line.strip() for line in file.readlines()]
 
 
-def getInputB():
-    return getInputA()
-
-
-def get_thing(nums):
+def get_gamma_epsilon(nums, is_part_b: bool = False):
     gamma = ""
     epsilon = ""
     count = 0
@@ -25,6 +21,7 @@ def get_thing(nums):
             gamma += "0"
             epsilon += "1"
         else:
+            assert is_part_b  # Part A makes no mention of how to handle ambiguity. If it happens, it's an error.
             gamma += "1"
             epsilon += "0"
         count = 0
@@ -34,49 +31,41 @@ def get_thing(nums):
 
 def day3a():
     print("    Part A")
-    nums = getInputA()
-    gamma, epsilon = get_thing(nums)
+    nums = get_input()
+    gamma, epsilon = get_gamma_epsilon(nums)
 
-    print(gamma)
-    print(epsilon)
-    #3529
-    #566
-    #not 1,855,944
-    #1, 997, 414
+    print(f"gamma: {gamma}, ({int(gamma, 2)})")
+    print(f"epsilon: {epsilon}, ({int(epsilon, 2)})")
+    print(f"result: {int(gamma, 2) * int(epsilon, 2)}")
 
 
 def day3b():
     print("\n    Part B")
-    nums = getInputB()
+    nums = get_input()
 
+    reduction = nums[:]
     for idx in range(len(nums[0])):
-        gamma, _ = get_thing(nums)
-        nums = [n for n in nums if n[idx] == gamma[idx]]
-        if len(nums) == 1:
-            print(nums)
+        gamma, _ = get_gamma_epsilon(reduction, is_part_b=True)
+        reduction = [n for n in reduction if n[idx] == gamma[idx]]
+        if len(reduction) == 1:
             break
 
-    if len(nums) != 1:
-        print(nums)
+    assert len(reduction) == 1
+    oxy_gen_rating = reduction[0]
 
-    nums = getInputB()
+    reduction = nums[:]
     for idx in range(len(nums[0])):
-        _, epsilon = get_thing(nums)
-        nums = [n for n in nums if n[idx] == epsilon[idx]]
-        if len(nums) == 1:
-            print(nums)
+        _, epsilon = get_gamma_epsilon(reduction, is_part_b=True)
+        reduction = [n for n in reduction if n[idx] == epsilon[idx]]
+        if len(reduction) == 1:
             break
 
-    if len(nums) != 1:
-        print(nums)
+    assert len(reduction) == 1
+    co2_scrub_rating = reduction[0]
 
-    #3531
-    #567
-    #not 2,002,077
-
-    #3573
-    #289
-    #1,032,597
+    print(f"oxygen generator rating: {oxy_gen_rating}, ({int(oxy_gen_rating, 2)})")
+    print(f"CO2 scrubber rating: {co2_scrub_rating}, ({int(co2_scrub_rating, 2)})")
+    print(f"result: {int(oxy_gen_rating, 2) * int(co2_scrub_rating, 2)}")
 
 
 if __name__ == '__main__':

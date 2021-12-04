@@ -1,5 +1,5 @@
 
-def get_input_a():
+def get_input():
     with open('day04.txt', 'r') as file:
         nums = [int(n) for n in file.readline().strip().split(',')]
         rest = [line.strip() for line in file.readlines() if line.strip() is not ""]
@@ -18,11 +18,8 @@ def get_input_a():
             boards.append(board[:])
             y = 0
             board = [[]]
+            
     return nums, boards
-
-
-def get_input_b():
-    return get_input_a()
 
 
 def call_number(board, num):
@@ -80,7 +77,7 @@ def sum_board(board):
 
 def day4a():
     print("    Part A")
-    nums, boards = get_input_a()
+    nums, boards = get_input()
     for num in nums:
         for board in boards:
             call_number(board, num)
@@ -94,24 +91,18 @@ def day4a():
 
 def day4b():
     print("\n    Part B")
-    nums, boards = get_input_a()
+    nums, boards = get_input()
     last_board = None
     last_num = 0
     to_remove = []
     for num in nums:
         for board in boards:
             call_number(board, num)
-        for i in range(len(boards)):
-            board = boards[i]
+        for i, board in enumerate(boards):
             if check_board(board):
-                print("Bingo!")
-                print_board(board)
-                print(sum_board(board) * num)
                 last_board = board
                 last_num = num
                 to_remove.append(i)
-        if len(to_remove) > 1:
-            pass
         if to_remove:
             to_remove.sort(reverse=True)
             for idx in to_remove:

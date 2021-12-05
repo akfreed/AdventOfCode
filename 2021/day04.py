@@ -18,7 +18,7 @@ def get_input():
             boards.append(board[:])
             y = 0
             board = [[]]
-            
+
     return nums, boards
 
 

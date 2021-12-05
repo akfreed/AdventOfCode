@@ -338,7 +338,18 @@ def render_map(tileMap, valueToStrMapping, defaultTile=None, originMark=None):
             else:
                 if isinstance(tile, str):
                     out += tile
-                else:
+                elif callable(valueToStrMapping):
+                    out += valueToStrMapping(tile)
+                elif type(valueToStrMapping) is dict:
                     out += valueToStrMapping[tile]
+                else:
+                    out += f"{tile}"
         out += '\n'
     print(out, end='')
+
+
+def inclusive_range(first, last, step=1):
+    assert step != 0
+    if first <= last:
+        return range(first, last + 1, step)
+    return range(first, last - 1, -step)

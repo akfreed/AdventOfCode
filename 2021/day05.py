@@ -1,7 +1,7 @@
-from utility import Vector, render_map
+from utility import Vector, render_map, inclusive_range
 
 
-def get_input_a():
+def get_input():
     with open('day05.txt', 'r') as file:
         lines = [line.strip() for line in file.readlines()]
     lines = [line.split(' -> ') for line in lines]
@@ -15,51 +15,44 @@ def get_input_a():
     return coords
 
 
-def get_input_b():
-    return get_input_a()
-
-
 def day5a():
     print("    Part A")
-    coords = get_input_a()
+    coords = get_input()
+    # Filter out diagonal lines.
     coords = [coord for coord in coords if coord[0].x == coord[1].x or coord[0].y == coord[1].y]
     grid = {}
     for coord in coords:
-        # horizontal
+        # Horizontal lines.
         if coord[0].x == coord[1].x:
-            start = coord[0].y if coord[0].y < coord[1].y else coord[1].y
-            end = (coord[0].y if coord[0].y > coord[1].y else coord[1].y) + 1
-            for y in range(start, end):
+            for y in inclusive_range(coord[0].y, coord[1].y):
                 v = Vector(coord[0].x, y)
                 if v in grid:
                     grid[v] += 1
                 else:
                     grid[v] = 1
-        # vertical
-        if coord[0].y == coord[1].y:
-            start = coord[0].x if coord[0].x < coord[1].x else coord[1].x
-            end = (coord[0].x if coord[0].x > coord[1].x else coord[1].x) + 1
-            for x in range(start, end):
+        # Vertial lines.
+        elif coord[0].y == coord[1].y:
+            for x in inclusive_range(coord[0].x, coord[1].x):
                 v = Vector(x, coord[0].y)
                 if v in grid:
                     grid[v] += 1
                 else:
                     grid[v] = 1
+        else:
+            assert False
 
-
-    #render_map(grid, lambda x: str(x))
+    # Count the intersections.
     count = 0
     for key in grid:
         if grid[key] > 1:
             count += 1
     print(count)
-
+    return count
 
 
 def day5b():
     print("\n    Part B")
-    coords = get_input_b()
-    #coords = [coord for coord in coords if coord[0].x == coord[1].x or coord[0].y == coord[1].y]
+    coords = get_input()
     grid = {}
     for coord in coords:
         # horizontal
@@ -72,6 +65,7 @@ def day5b():
                     grid[v] += 1
                 else:
                     grid[v] = 1
+
         # vertical
         elif coord[0].y == coord[1].y:
             start = coord[0].x if coord[0].x < coord[1].x else coord[1].x
@@ -85,47 +79,24 @@ def day5b():
 
         # diagonal
         else:
-            start_y = coord[0].y
-            end_y = coord[1].y
-            if start_y > end_y:
-                step_y = -1
-            else:
-                step_y = 1
-            end_y += step_y
-
-            start_x = coord[0].x
-            end_x = coord[1].x
-            if start_x > end_x:
-                step_x = -1
-            else:
-                step_x = 1
-            end_x += step_x
-
-            x_range = [_ for _ in range(start_x, end_x, step_x)]
-            y_range = [_ for _ in range(start_y, end_y, step_y)]
-
-            #assert end_x - start_x == end_y - start_y
-            for i, x in enumerate(x_range):
-                y = y_range[i]
+            assert abs(coord[0].x - coord[1].x) == abs(coord[0].y - coord[1].y)
+            for x, y in zip(inclusive_range(coord[0].x, coord[1].x), inclusive_range(coord[0].y, coord[1].y)):
                 v = Vector(x, y)
                 if v in grid:
                     grid[v] += 1
                 else:
                     grid[v] = 1
 
-
-
-        #render_map(grid, None, ".")
-        #print()
     count = 0
     for key in grid:
         if grid[key] > 1:
             count += 1
     print(count)
-
-    #not 20027
+    return count
 
 
 if __name__ == '__main__':
-    day5a()
-    day5b()
+    count = day5a()
+    assert count == 5084
+    count = day5b()
+    assert count == 17882

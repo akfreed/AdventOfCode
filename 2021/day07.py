@@ -1,59 +1,41 @@
-
-def get_input_a():
+def get_input():
     with open('day07.txt', 'r') as file:
         return [int(n) for n in file.readline().strip().split(',')]
 
 
-def get_input_b():
-    return get_input_a()
+def calc_fuel_a(nums, pos):
+    return sum(abs(n - pos) for n in nums)
 
 
-def calc_fuel(nums, pos):
-    fuel = 0
-    for n in nums:
-        fuel += abs(n - pos)
-    return fuel
-
-
-def calc_fuel2(nums, pos):
-    fuel = 0
-    for n in nums:
-        steps = abs(n - pos)
-        fuel += (steps * (steps + 1)) / 2
-    return fuel
+def calc_fuel_b(nums, pos):
+    steps = [abs(n - pos) for n in nums]
+    return sum([(n * (n + 1)) / 2 for n in steps])
 
 
 def day7a():
     print("    Part A")
-    nums = sorted(get_input_a())
-    print(len(nums))
-    #print(nums[499:501])
-    print(nums)
-    print(calc_fuel(nums, 499))
-    print(calc_fuel(nums, 500))
-    min1 = min(nums)
-    max1 = max(nums)
-    least = 1000000000
-    for i in range(min1, max1 + 1):
-        if calc_fuel(nums, i) < least:
-            least = calc_fuel(nums, i)
-            print(i)
-    print(least)
+    nums = get_input()
+
+    costs = {calc_fuel_a(nums, i): i for i in range(min(nums), max(nums) + 1)}
+    cheapest = min(costs.keys())
+
+    print(f"Cheapest cost: {cheapest}")
+    print(f"Index: {costs[cheapest]}")
+    assert cheapest == 340987
+    return cheapest
 
 
 def day7b():
     print("\n    Part B")
-    nums = get_input_b()
-    min1 = min(nums)
-    max1 = max(nums)
-    least = 1000000000000
-    for i in range(min1, max1 + 1):
-        if calc_fuel2(nums, i) < least:
-            least = calc_fuel2(nums, i)
-            print(i)
-    print(least)
+    nums = get_input()
 
-# not 478567
+    costs = {calc_fuel_b(nums, i): i for i in range(min(nums), max(nums) + 1)}
+    cheapest = min(costs.keys())
+
+    print(f"Cheapest cost: {cheapest}")
+    print(f"Index: {costs[cheapest]}")
+    assert cheapest == 96987874
+    return cheapest
 
 
 if __name__ == '__main__':

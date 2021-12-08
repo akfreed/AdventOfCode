@@ -1,4 +1,3 @@
-
 def get_input_a():
     with open('day01.txt', 'r') as file:
         pass

@@ -122,7 +122,7 @@ class Graph:
 
         return True
 
-    def auto_link_manhattan(self):
+    def auto_link_manhattan(self, condition=None):
         """Automatically add edges to each node to the
         north, west, south, and east nodes, (if they exist) in that order.
 
@@ -130,13 +130,17 @@ class Graph:
         """
         for position in self.nodes:
             if position.up() in self.nodes:
-                self.add_edge(position, position.up(), directed=True, cost=1, direction=Direction.UP)
+                if condition is None or condition(self.nodes[position.up()]):
+                    self.add_edge(position, position.up(), directed=True, cost=1, direction=Direction.UP)
             if position.left() in self.nodes:
-                self.add_edge(position, position.left(), directed=True, cost=1, direction=Direction.LEFT)
+                if condition is None or condition(self.nodes[position.left()]):
+                    self.add_edge(position, position.left(), directed=True, cost=1, direction=Direction.LEFT)
             if position.down() in self.nodes:
-                self.add_edge(position, position.down(), directed=True, cost=1, direction=Direction.DOWN)
+                if condition is None or condition(self.nodes[position.down()]):
+                    self.add_edge(position, position.down(), directed=True, cost=1, direction=Direction.DOWN)
             if position.right() in self.nodes:
-                self.add_edge(position, position.right(), directed=True, cost=1, direction=Direction.RIGHT)
+                if condition is None or condition(self.nodes[position.right()]):
+                    self.add_edge(position, position.right(), directed=True, cost=1, direction=Direction.RIGHT)
 
     def auto_link_diagonal(self):
         """Automatically add edges to each node to the

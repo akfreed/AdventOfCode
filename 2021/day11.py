@@ -1,27 +1,26 @@
-from utility import *
+from utility import Vector
 from pathfinding import *
 
 
-def get_input_a():
+def get_input():
     with open('day11.txt', 'r') as file:
         lines = [line.strip() for line in file.readlines()]
-    g = Graph()
+    graph = Graph()
     for y, line in enumerate(lines):
         for x, val in enumerate(line):
-            g.add_node(Vector(x, y), int(val))
-    g.auto_link_diagonal()
-    return g
+            graph.add_node(Vector(x, y), int(val))
+    graph.auto_link_diagonal()
+    return graph
 
 
-def get_input_b():
-    return get_input_a()
+def flash_closure(graph, starting_nodes):
+    if not starting_nodes:
+        return
 
-
-def bfs(g, starting):
-    g.reset_distances()
+    graph.reset_distances()
 
     to_visit = PriorityQueue(0)
-    for n in starting:
+    for n in starting_nodes:
         to_visit.put(n)
 
     while to_visit.empty() is False:
@@ -33,43 +32,55 @@ def bfs(g, starting):
         for edge in node.edges:
             neighbor = edge.to
             neighbor.data += 1
-            if not neighbor.visited:
-                if neighbor.data > 9:
-                    to_visit.put(neighbor)
+            if not neighbor.visited and neighbor.data > 9:
+                to_visit.put(neighbor)
 
-    a = True
-    for v in g.nodes.values():
-        if v.data > 9:
-            v.data = 0
-        else:
-            a = False
 
-    return a
+def day11a():
+    print("    Part A")
+    graph = get_input()
+    num_flashes = 0
+    for i in range(100):
+        for vector in graph.nodes.values():
+            vector.data += 1
+        starting_nodes = [v for v in graph.nodes.values() if v.data > 9]
+        flash_closure(graph, starting_nodes)
+        # Reset energy and count flashes.
+        for vector in graph.nodes.values():
+            if vector.data > 9:
+                vector.data = 0
+                num_flashes += 1
+    print(f"Number of flashes: {num_flashes}")
+    assert num_flashes == 1647
+    return num_flashes
 
 
 def day11b():
-    print("    Part A")
-    g = get_input_a()
-    agg = 0
+    print("\n    Part B")
+    graph = get_input()
     i = 1
     while True:
-        for v in g.nodes.values():
-            v.data += 1
-        starting = [v for v in g.nodes.values() if v.data > 9]
-        if starting:
-            if bfs(g, starting):
-                print(i)
-                break
+        for vector in graph.nodes.values():
+            vector.data += 1
+        starting_nodes = [v for v in graph.nodes.values() if v.data > 9]
+        flash_closure(graph, starting_nodes)
+        # Reset energy and check if every squid flashed.
+        sync_flash = True
+        for vector in graph.nodes.values():
+            if vector.data > 9:
+                vector.data = 0
+            else:
+                sync_flash = False
+        if sync_flash:
+            break
 
         i += 1
-    # not 347
 
-
-
-
-
-
+    print(f"First synchronized flash: {i}")
+    assert i == 348
+    return i
 
 
 if __name__ == '__main__':
+    day11a()
     day11b()
